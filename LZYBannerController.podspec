@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint LZYBannerView.podspec' to ensure this is a
+#  Be sure to run `pod spec lint LZYBannerController.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "LZYBannerView"
-  s.version      = "1.0.0"
+  s.name         = "LZYBannerController"
+  s.version      = "1.0.2"
   s.summary      = "简单方便实现轮播图, 自动轮播"
 
   # This description is used to generate tags and improve search results.
@@ -25,10 +25,9 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                        简单方便实现轮播图, 自动轮播, 可以设置轮播切换的时间, 轮播图显示的样式
                    DESC
 
-  s.homepage     = "https://github.com/LZY-WLY/LZYBannerView#lzybannerview.git"
+  s.homepage     = "https://github.com/LZY-WLY/LZYBannerView.git"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -56,7 +55,7 @@ Pod::Spec.new do |s|
   s.author             = { "lzy" => "18860233120@163.com" }
   # Or just: s.author    = "lzy"
   # s.authors            = { "lzy" => "18860233120@163.com" }
-  # s.social_media_url   = "https://www.jianshu.com/u/3af5c5e3f2eb"
+  # s.social_media_url   = "http://twitter.com/lzy"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -80,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/LZY-WLY/LZYBannerView#lzybannerview.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/LZY-WLY/LZYBannerView.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -91,8 +90,8 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-s.source_files  = "LZYBannerView/*.{h,m,xib}"
-  #s.exclude_files = "Classes/Exclude"
+  s.source_files  = "LZYBannerController", "LZYBannerController/LZYBannerView/*.{h,m,xib}"
+#s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
 
@@ -105,7 +104,7 @@ s.source_files  = "LZYBannerView/*.{h,m,xib}"
   #  non-essential files like tests, examples and documentation.
   #
 
-    s.resource  = "bannerViewPlactoler@2x.jpeg"
+  # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
@@ -117,7 +116,7 @@ s.source_files  = "LZYBannerView/*.{h,m,xib}"
   #  the lib prefix of their name.
   #
 
-  # s.framework  = "SomeFramework"
+   s.framework  = "UIKit"
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
