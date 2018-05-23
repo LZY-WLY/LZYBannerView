@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class LZYBannerView;
-//创建协议
+//协议
 @protocol LZYBannerViewDelegate <NSObject>
 
 /**
@@ -31,8 +31,6 @@ typedef enum : NSUInteger {
 } LZYBannerViewStyle;
 
 
-
-
 @interface LZYBannerView : UIView
 /**
  返回轮播图对象
@@ -44,4 +42,26 @@ typedef enum : NSUInteger {
  @param delegate 代理
  */
 - (instancetype)initWithFrame:(CGRect)frame bannerStyle:(LZYBannerViewStyle)bannerStyle dataSoucreBanner:(NSArray<NSString *> *)dataSoucreBanner changeTime:(int)changeTime delegate:(id<LZYBannerViewDelegate>)delegate;
+/**
+ 返回轮播图对象
+ 
+ @param frame 轮播图的位置
+ @param bannerStyle 轮播图样式
+ @param dataSoucreBanner 轮播图显示的数据源 (@["https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1526795645990&di=f09c38a1145879378cbea1dd28819f64&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201512%2F01%2F20151201174510_uZBwR.jpeg", ...])
+ @param changeTime 切换轮播图的时间
+ @param pageControlImage 使用图片替换系统的小圆点
+ @param currentPageControlImage 使用图片替换当前显示的系统小圆点 
+ @param delegate 代理
+ */
+- (instancetype)initWithFrame:(CGRect)frame bannerStyle:(LZYBannerViewStyle)bannerStyle dataSoucreBanner:(NSArray<NSString *> *)dataSoucreBanner changeTime:(int)changeTime pageControlImage:(UIImage *)pageControlImage currentPageControlImage:(UIImage *)currentPageControlImage delegate:(id<LZYBannerViewDelegate>)delegate;
+
+/**
+ 指示器(pageControl) 显示的颜色 默认为白色
+ */
+@property (nonatomic, strong) UIColor *pageControlColor;
+
+/**
+ 指示器(pageControl) 当前显示的颜色 默认为红色
+ */
+@property (nonatomic, strong) UIColor *currentPageControlColor;
 @end

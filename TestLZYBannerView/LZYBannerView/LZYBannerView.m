@@ -24,6 +24,8 @@
 @property (nonatomic, assign) int changeTime;
 ///定时器
 @property (nonatomic, strong) NSTimer *timer;
+///指示器
+@property (nonatomic, strong) UIPageControl *pageControl;
 @end
 
 static NSString * const cellId = @"bannerId";
@@ -50,6 +52,19 @@ static NSString * const cellId = @"bannerId";
     }
     return _collection;
 }
+- (UIPageControl *)pageControl {
+    if (!_pageControl) {
+        CGRect frame = CGRectMake(0, self.bounds.size.height - 20, self.bounds.size.width, 20);
+        self.pageControl = [[UIPageControl alloc]initWithFrame:frame];
+        _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+        _pageControl.currentPageIndicatorTintColor = [UIColor redColor];
+//         [_pageControl setValue:[UIImage imageNamed:@"currenPage"] forKeyPath:@"_currentPageImage"];
+//        [_pageControl setValue:[UIImage imageNamed:@"page"] forKeyPath:@"_pageImage"];
+        [self addSubview:_pageControl];
+    }
+    return _pageControl;
+}
+//不带替换系统圆点
 - (instancetype)initWithFrame:(CGRect)frame bannerStyle:(LZYBannerViewStyle)bannerStyle dataSoucreBanner:(NSMutableArray<NSString *> *)dataSoucreBanner changeTime:(int)changeTime delegate:(id<LZYBannerViewDelegate>)delegate {
     if (self = [super initWithFrame:frame]) {
         self.bannerStyle = bannerStyle;
@@ -57,11 +72,42 @@ static NSString * const cellId = @"bannerId";
         self.changeTime = changeTime;
         self.LZYBannerViewDelegate = delegate;
         [self addSubview:self.collection];
+        if (bannerStyle == LZYBannerViewStylePage) {
+            self.pageControl.numberOfPages = dataSoucreBanner.count;
+        }
         //开始定时器
         [self startTimer];
     }
     return self;
 }
+//带替换系统圆点
+- (instancetype)initWithFrame:(CGRect)frame bannerStyle:(LZYBannerViewStyle)bannerStyle dataSoucreBanner:(NSArray<NSString *> *)dataSoucreBanner changeTime:(int)changeTime pageControlImage:(UIImage *)pageControlImage currentPageControlImage:(UIImage *)currentPageControlImage delegate:(id<LZYBannerViewDelegate>)delegate {
+    if (self = [super initWithFrame:frame]) {
+        self.bannerStyle = bannerStyle;
+        self.dataSoucreBanner = dataSoucreBanner;
+        self.changeTime = changeTime;
+        self.LZYBannerViewDelegate = delegate;
+        [self addSubview:self.collection];
+        if (bannerStyle == LZYBannerViewStylePage) {
+            [self.pageControl setValue:pageControlImage forKeyPath:@"_pageImage"];
+            [self.pageControl setValue:currentPageControlImage forKeyPath:@"_currentPageImage"];
+            self.pageControl.numberOfPages = dataSoucreBanner.count;
+        }
+        //开始定时器
+        [self startTimer];
+    }
+    return self;
+}
+#pragma mark - 指示器显示的颜色
+- (void)setCurrentPageControlColor:(UIColor *)currentPageControlColor {
+    _currentPageControlColor = currentPageControlColor;
+    _pageControl.currentPageIndicatorTintColor = currentPageControlColor;
+}
+- (void)setPageControlColor:(UIColor *)pageControlColor {
+    _pageControlColor = pageControlColor;
+    _pageControl.pageIndicatorTintColor = pageControlColor;
+}
+
 #pragma mark - UICollectionView协议
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.dataSoucreBanner.count * 1000;
@@ -72,7 +118,6 @@ static NSString * const cellId = @"bannerId";
     return cell;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"didSelectItemAtIndexPath");
     if ([self.LZYBannerViewDelegate respondsToSelector:@selector(bannerView:didSelectRow:)]) {
         [self.LZYBannerViewDelegate bannerView:self didSelectRow:indexPath.item % self.dataSoucreBanner.count];
     }
@@ -81,10 +126,20 @@ static NSString * const cellId = @"bannerId";
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self endTimer];
 }
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView  {
     [self startTimer];
 }
-
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+     if (self.bannerStyle == LZYBannerViewStylePage) {
+         [self scrollViewDidEndDecelerating:scrollView];
+     }
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (self.bannerStyle == LZYBannerViewStylePage) {
+        NSInteger index = scrollView.contentOffset.x / self.collection.bounds.size.width;
+        self.pageControl.currentPage = index  % self.dataSoucreBanner.count;
+    }
+}
 #pragma mark - 创建定时器
 - (void)startTimer {
     if (!self.timer) {
